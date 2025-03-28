@@ -1,43 +1,38 @@
-name: End-to-end tests
+
+        name: Cypress Tests
 
 on:
   push:
     branches:
-      - master  # ou qualquer outra branch em que você queira rodar os testes
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'  # ou a versão do Node.js que você está usando
+          node-version: 16
 
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm ci
 
-      - name: Cypress run
+      - name: Verify Cypress installation
+        run: npm install cypress --save-dev
+
+      - name: List Cypress Cache
+        run: npx cypress cache list
+
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
-          start: true  # Inicia os testes do Cypress
-
-      - name: Upload Cypress screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          if-no-files-found: ignore  # Se não encontrar arquivos, ignora
-
-      - name: Upload Cypress videos
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          if-no-files-found: ignore  # Se não encontrar arquivos, ignora
-
+          browser: chrome
+          headless: true
