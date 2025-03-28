@@ -24,7 +24,7 @@ jobs:
           if-no-files-found: ignore  # Se não encontrar arquivos, ignora
 
       - name: Upload Cypress videos
-        uses: actions/upload-artifact@v3  # Alterado para v3
+        uses: actions/upload-artifact@v4  # Alterado para v3
         with:
           name: cypress-videos
           path: cypress/videos
